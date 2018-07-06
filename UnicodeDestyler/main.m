@@ -10,12 +10,19 @@
 
 #import "NSString+UnicodeDestyler.h"
 
+void debugDump(void);
+
 int main(int argc, const char * argv[]) {
 	@autoreleasepool {
-		NSArray<NSString*>* args = [NSProcessInfo processInfo].arguments;
-		NSString* result = [args.lastObject ud_stringWithDestyledUnicode];
+		if (argc < 2) {
+			[NSString ud_debugDestyledUnicode];
+		}
+		else {
+			NSArray<NSString*>* args = [NSProcessInfo processInfo].arguments;
+			NSString* result = [args.lastObject ud_stringWithDestyledUnicode];
 		
-		[result writeToFile:@"/dev/stdout" atomically: NO encoding: NSUTF8StringEncoding error: nil];
+			[result writeToFile:@"/dev/stdout" atomically: NO encoding: NSUTF8StringEncoding error: nil];
+		}
 	}
 	
 	return 0;

@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)ud_stringWithDestyledUnicode;
 
++ (void)ud_debugDestyledUnicode;
+
 @end
 
 NS_ASSUME_NONNULL_END

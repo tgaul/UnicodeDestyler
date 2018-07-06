@@ -273,27 +273,6 @@ NSCharacterSet *asciiUnicodeMathCharacterSet() {
 	return set;
 }
 
-void debugDump() {
-	NSDictionary *mappings = allMappings();
-	
-	NSMutableDictionary *reversed = [NSMutableDictionary dictionary];
-	[mappings enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
-		NSString *existing = reversed[obj];
-		if (existing) {
-			reversed[obj] = [existing stringByAppendingString:key];
-		}
-		else {
-			reversed[obj] = key;
-		}
-	}];
-	
-	NSArray *keys = [reversed.allKeys sortedArrayUsingSelector:@selector(compare:)];
-	for (NSString *key in keys) {
-		NSLog(@"%@ <- %@", key, reversed[key]);
-	}
-}
-
-
 @implementation NSString (UnicodeDestyler)
 
 - (NSString *)ud_stringWithDestyledUnicode
@@ -313,5 +292,29 @@ void debugDump() {
 	
 	return [NSString stringWithString:outStr];	// make non-mutable
 }
+
++ (void)ud_debugDestyledUnicode
+{
+	NSDictionary *mappings = allMappings();
+	
+	NSMutableDictionary *reversed = [NSMutableDictionary dictionary];
+	[mappings enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
+		NSString *existing = reversed[obj];
+		if (existing) {
+			reversed[obj] = [existing stringByAppendingString:key];
+		}
+		else {
+			reversed[obj] = key;
+		}
+	}];
+	
+	NSArray *keys = [reversed.allKeys sortedArrayUsingSelector:@selector(compare:)];
+	for (NSString *key in keys) {
+		NSString *str = [NSString stringWithFormat:@"%@ <- %@\n", key, reversed[key]];
+		[str writeToFile:@"/dev/stdout" atomically: NO encoding: NSUTF8StringEncoding error: nil];
+	}
+}
+
+
 
 @end

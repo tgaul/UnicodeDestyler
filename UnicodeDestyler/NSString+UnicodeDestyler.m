@@ -235,7 +235,7 @@ NSCharacterSet *asciiUnicodeMathCharacterSet() {
 	return set;
 }
 
-void check() {
+void debugDump() {
 	NSDictionary *mappings = allMappings();
 	
 	NSMutableDictionary *reversed = [NSMutableDictionary dictionary];

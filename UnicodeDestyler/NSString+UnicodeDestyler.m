@@ -52,6 +52,20 @@ static const UTF32Char mathematicalMonospaceCapitalA = 0x1D670;
 static const UTF32Char mathematicalMonospaceSmallA = 0x1D68A;
 static const UTF32Char mathematicalMonospaceDigit0 = 0x1D7F6;
 
+static const UTF32Char circledLatinCapitalA = 0x24B6;
+static const UTF32Char circledLatinSmallA = 0x24D0;
+
+static const UTF32Char negativeCircledCapitalA = 0x1F150;
+
+static const UTF32Char dingbatNegativeCircledDigit0 = 0x24FF;
+static const UTF32Char dingbatNegativeCircledDigit1 = 0x2776;			// 1 through 10
+
+static const UTF32Char dingbatCircledSanSerifDigit0 = 0x1F10B;
+static const UTF32Char dingbatCircledSanSerifDigit1 = 0x2780;			// 1 through 10
+
+static const UTF32Char dingbatNegativeCircledSanSerifDigit0 = 0x1F10C;
+static const UTF32Char dingbatNegativeCircledSanSerifDigit1 = 0x278A;	// 1 through 10
+
 static UTF32Char styledCapitalAs[] = {
 	mathematicalBoldCapitalA,
 	mathematicalItalicCapitalA,
@@ -66,6 +80,8 @@ static UTF32Char styledCapitalAs[] = {
 	mathematicalSanSerifItalicCapitalA,
 	mathematicalSanSerifBoldItalicCapitalA,
 	mathematicalMonospaceCapitalA,
+	circledLatinCapitalA,
+	negativeCircledCapitalA,
 };
 
 static UTF32Char styledSmallAs[] = {
@@ -82,15 +98,30 @@ static UTF32Char styledSmallAs[] = {
 	mathematicalSanSerifItalicSmallA,
 	mathematicalSanSerifBoldItalicSmallA,
 	mathematicalMonospaceSmallA,
+	circledLatinSmallA,
 };
 
-static UTF32Char styled0s[] = {
+static UTF32Char styled0to9s[] = {
 	mathematicalBoldDigit0,
 	mathematicalDoubleStruckDigit0,
 	mathematicalSanSerifBoldDigit0,
 	mathematicalSanSerifDigit0,
 	mathematicalMonospaceDigit0,
 };
+
+static UTF32Char styled1to10s[] = {
+	dingbatNegativeCircledDigit1,
+	dingbatCircledSanSerifDigit1,
+	dingbatNegativeCircledSanSerifDigit1,
+};
+
+static NSString *strForUTF32Char(UTF32Char ch) {
+	UTF32Char littleChar = NSSwapHostIntToLittle(ch);
+	return [[NSString alloc] initWithBytes:&littleChar length:4
+								  encoding:NSUTF32LittleEndianStringEncoding];
+}
+
+#define CH strForUTF32Char
 
 static NSDictionary *individualMappings() {
 	return @{
@@ -163,13 +194,12 @@ static NSDictionary *individualMappings() {
 //		@"\U00001D00": @"x",	// no X in Unicode
 		@"\U0000028F": @"y",
 		@"\U00001D22": @"z",
+		
+		// circled digit 0s
+		CH(dingbatNegativeCircledDigit0): @"0",
+		CH(dingbatCircledSanSerifDigit0): @"0",
+		CH(dingbatNegativeCircledSanSerifDigit0): @"0",
 	};
-}
-
-static NSString *strForUTF32Char(UTF32Char ch) {
-	UTF32Char littleChar = NSSwapHostIntToLittle(ch);
-	return [[NSString alloc] initWithBytes:&littleChar length:4
-								  encoding:NSUTF32LittleEndianStringEncoding];
 }
 
 static void add(NSMutableDictionary *dict, UTF32Char srcUTF32Char, unichar dstUnichar) {
@@ -201,11 +231,19 @@ static NSDictionary *allMappings() {
 			}
 		}
 		
-		for (NSInteger i = 0 ; i < sizeof(styled0s) / sizeof(styled0s[0]) ; ++i) {
-			UTF32Char zero = styled0s[i];
+		for (NSInteger i = 0 ; i < sizeof(styled0to9s) / sizeof(styled0to9s[0]) ; ++i) {
+			UTF32Char zero = styled0to9s[i];
 			
 			for (int j = 0 ; j < 10 ; ++j) {
 				add(dict, zero + j, '0' + j);
+			}
+		}
+		
+		for (NSInteger i = 0 ; i < sizeof(styled1to10s) / sizeof(styled1to10s[0]) ; ++i) {
+			UTF32Char one = styled1to10s[i];
+			
+			for (int j = 0 ; j < 9 ; ++j) {
+				add(dict, one + j, '1' + j);
 			}
 		}
 		

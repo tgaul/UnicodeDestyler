@@ -3,7 +3,7 @@
 //  UnicodeDestyler
 //
 //  Created by Troy Gaul on 7/6/18.
-//  Copyright © 2018 Troy Gaul. All rights reserved.
+//  Copyright © 2019 Troy Gaul. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

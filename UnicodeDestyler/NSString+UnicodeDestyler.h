@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (UnicodeDestyler)
 
-- (NSString *)ud_stringWithDestyledUnicode;
+    - (NSString *)ud_stringWithDestyledUnicode;
 
-+ (void)ud_debugDestyledUnicode;
+    + (void)ud_debugDestyledUnicode;
 
 @end
 
